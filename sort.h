@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 /**
  * struct listint_s - Doubly linked list node
@@ -13,21 +14,23 @@
  */
 typedef struct listint_s
 {
-const int n;
-struct listint_s *prev;
-struct listint_s *next;
+	const int n;
+	struct listint_s *prev;
+	struct listint_s *next;
 } listint_t;
 
-/* functions helper for the project */
 void print_array(const int *array, size_t size);
 void print_list(const listint_t *list);
-
-/* Mandatory tasks */
 void bubble_sort(int *array, size_t size);
 void insertion_sort_list(listint_t **list);
 void selection_sort(int *array, size_t size);
 void quick_sort(int *array, size_t size);
-void swap(int *val1, int *val2, size_t size, int *arr);
-int sort(int *arr, size_t size, int lower_limt, int limt);
-void partition(int *arr, size_t size, int lower_limt, int limt);
+ssize_t _partition(int *arr, ssize_t f, ssize_t l, size_t size);
+void _qsort(int *arr, ssize_t f, ssize_t l, size_t size);
+void merge_sort(int *array, size_t size);
+void top_dwn_mrg_srt(int *arr, int *out_arr, size_t size);
+void top_dwn_split_mrg(int *out_arr, size_t strt, size_t end, int *arr);
+void top_dwn_mrg(int *arr, size_t strt, size_t mid, size_t end, int *out_arr);
+void copy_array(int *arr, size_t strt, size_t end, int *out_arr);
+
 #endif /* SORT_H */
