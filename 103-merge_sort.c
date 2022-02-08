@@ -1,84 +1,108 @@
 #include "sort.h"
 
 /**
- * merge - Merges the splits from merge_sorty
- * @array: Array split to merge
- * @low: lowest index of split
- * @middle: middle index of split
- * @high: high index of split
- * @temp: temp array for merging
+ * merge_sort - top down sort function
+ * @array: The array to be sorted
+ * @size: Number of elements in array
+ * Return: Nothing
  */
-
-void merge(int *array, int low, int middle, int high, int *temp)
-{
-	int i, j, k, l = 0, r = 0, n, left[4096], right[4096];
-
-	printf("Merging...\n");
-	i = low, j = middle + 1, k = l = 0;
-	while (i <= middle && j <= high)
-	{
-		if (array[i] <= array[j])
-			temp[k] = left[l] = array[i], k++, i++, l++;
-		else
-			temp[k] = right[r] = array[j], k++, j++, r++;
-	}
-	while (i <= middle)
-		temp[k] = left[l] = array[i], k++, i++, l++;
-	while (j <= high)
-		temp[k] = right[r] = array[j], k++, j++, r++;
-	printf("[left]: ");
-	for (n = 0; n < l; n++)
-		(n == 0) ? printf("%d", left[n]) : printf(", %d", left[n]);
-	printf("\n[right]: ");
-	for (n = 0; n < r; n++)
-		(n == 0) ? printf("%d", right[n]) : printf(", %d", right[n]);
-	printf("\n[Done]: ");
-	for (i = low; i <= high; i++)
-	{
-		array[i] = temp[i - low], printf("%d", array[i]);
-		if (i != high)
-			printf(", ");
-		else
-			printf("\n");
-	}
-}
-
-/**
- * merge_sort_y - recurrsive function utilizing merge sort algorithm
- * @array: Array
- * @low: Lowest index of split
- * @high: highest index of split
- * @temp: temp array for mergin
- */
-
-void merge_sort_y(int *array, int low, int high, int *temp)
-{
-	int middle;
-
-	if (low < high)
-	{
-		middle = ((high + low - 1) / 2);
-		merge_sort_y(array, low, middle, temp);
-		merge_sort_y(array, middle + 1, high, temp);
-		merge(array, low, middle, high, temp);
-	}
-}
-
-/**
- * merge_sort - Sorts array with merge sort algo
- * @array: array to sort
- * @size: Size of array to sort
- */
-
 void merge_sort(int *array, size_t size)
 {
-	int *temp;
+	int *out_arr = NULL;
 
-	if (array == NULL || size < 2)
+	if (size < 2)
 		return;
-	temp = malloc(sizeof(int) * (size + 1));
-	if (temp == NULL)
+	out_arr = malloc(sizeof(int) * size);
+	if (!out_arr)
 		return;
-	merge_sort_y(array, 0, size - 1, temp);
-	free(temp);
+	top_dwn_mrg_srt(array, out_arr, size);
+	free(out_arr);
+}
+
+/**
+ * top_dwn_mrg_srt - calls tp_dn_split merge, copy_array
+ * @arr: input array
+ * @out_arr: output array
+ * @size: input array size
+ * Return: Nothing
+ */
+void top_dwn_mrg_srt(int *arr, int *out_arr, size_t size)
+{
+	copy_array(arr, 0, size, out_arr);
+	top_dwn_split_mrg(out_arr, 0, size, arr);
+}
+
+/**
+ * top_dwn_split_mrg - splits array
+ * @out_arr: output array
+ * @strt: start index
+ * @end: end index
+ * @arr: input array
+ * Return: Nothing
+ */
+void top_dwn_split_mrg(int *out_arr, size_t strt, size_t end, int *arr)
+{
+	size_t mid = 0;
+
+	if (end - strt < 2)
+		return;
+	mid = (end + strt) / 2;
+	top_dwn_split_mrg(arr, strt, mid, out_arr);
+	top_dwn_split_mrg(arr, mid, end, out_arr);
+	top_dwn_mrg(out_arr, strt, mid, end, arr);
+}
+
+/**
+ * top_dwn_mrg - sort and merge
+ * @arr: input array
+ * @strt: index start
+ * @mid: index middle
+ * @end: end index
+ * @out_arr: output array
+ * Return: Nothing
+ */
+void top_dwn_mrg(int *arr, size_t strt, size_t mid, size_t end, int *out_arr)
+{
+	size_t i = strt, j = mid, k = 0;
+
+	printf("Merging...\n");
+	printf("[left]: ");
+	for (i = strt; i < mid - 1; i++)
+		printf("%d, ", arr[i]);
+	printf("%d\n[right]: ", arr[i]);
+	for (i = mid; i < end - 1; i++)
+		printf("%d, ", arr[i]);
+	printf("%d\n", arr[i]);
+	i = strt;
+	for (k = strt; k < end; k++)
+		if (i < mid && (j >= end || arr[i] <= arr[j]))
+		{
+			out_arr[k] = arr[i];
+			i++;
+		}
+		else
+		{
+			out_arr[k] = arr[j];
+			j++;
+		}
+	printf("[Done]: ");
+	for (i = strt; i < end - 1; i++)
+		printf("%d, ", out_arr[i]);
+	printf("%d\n", out_arr[i]);
+}
+
+/**
+ * copy_array - copy sorted values to out_arr
+ * @arr: input array
+ * @strt: start index
+ * @end: end index
+ * @out_arr: output array
+ * Return: nothing
+ */
+void copy_array(int *arr, size_t strt, size_t end, int *out_arr)
+{
+	size_t k = 0;
+
+	for (k = strt; k < end; k++)
+		out_arr[k] = arr[k];
 }
