@@ -44,7 +44,7 @@ void merge(int *array, int low, int middle, int high, int *temp)
 }
 
 /**
- * merge_sort_y - recurrsive function utilizing merge sort algo
+ * merge_sort_y - recurrsive function utilizing merge sort algorithm
  * @array: Array
  * @low: Lowest index of split
  * @high: highest index of split
