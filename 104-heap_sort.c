@@ -5,7 +5,7 @@
 #define HEAP_RCHILD_INDEX(node_index) (((node_index) * 2) + 2)
 
 /**
- * pswap - swap elements and print array
+ * pswap - swaps elements and print array
  *
  * @array: pointer to the array
  * @size: sizeo of the array
